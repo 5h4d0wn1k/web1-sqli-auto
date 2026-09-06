@@ -140,6 +140,62 @@ If you discover vulnerabilities using this tool, follow responsible disclosure p
 2. Allow reasonable time for remediation
 3. Do not exploit beyond proof of concept
 
+## Running the Scanner
+
+The scanner ships with a **vulnerable target simulator** (a stdlib `http.server`
+that intentionally implements an error/boolean-based MySQL injection bug). The
+demo mode runs the full detection engine against that localhost simulator — the
+exact same code path used against a live target.
+
+```bash
+# Offline demo: scans the built-in vulnerable simulator, prints findings, exit 0
+python3 sqli_auto.py --demo
+
+# Live target (authorized lab targets only)
+python3 sqli_auto.py -u "http://<your-lab-target>/page?id=1"
+
+# POST scan, cookies, headers, JSON export
+python3 sqli_auto.py -u "http://<your-lab-target>/login" -m POST -d "user=admin&pass=test" -o findings.json
+
+# Force DB type
+python3 sqli_auto.py -u "http://<your-lab-target>/page?id=1" --db mysql
+
+# Verbose
+python3 sqli_auto.py -u "http://<your-lab-target>/page?id=1" -v
+```
+
+The scanner uses the Python standard library (`urllib`) for all HTTP traffic.
+The optional `requests` package is never required; if present it is not used.
+
+## Tests
+
+```bash
+python3 -m unittest discover -s tests -v
+```
+
+Tests start a local vulnerable simulator and a clean control server, then assert
+that (a) the scanner flags the planted SQLi bug and (b) it does not false-positive
+on the clean page.
+
+## Live Lab Test Plan
+
+Test only against targets in your own lab (e.g. a local DVWA/MySQL container, or
+a deliberately misconfigured app on 127.0.0.1 or 192.0.2.x RFC-5737 space):
+
+1. Deploy the vulnerable test app on a local VM/container.
+2. Confirm baseline: `python3 sqli_auto.py -u "http://127.0.0.1:<port>/page?id=1" -v`
+   shows a working baseline request.
+3. Run the scan: `python3 sqli_auto.py -u "http://127.0.0.1:<port>/page?id=1" --db mysql`
+   and confirm a finding is reported.
+4. Repeat against a hardened/patch-test control page and confirm no finding.
+5. Document the target, params scanned, and evidence in your lab report.
+
+## Metrics
+
+- **Video metric**: 60-second screencast of `--demo` reporting findings plus the
+  unittest output (`python3 -m unittest discover -s tests -v`), recorded on the
+  lab-only loopback target.
+
 ## License
 
 MIT
