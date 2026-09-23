@@ -5,7 +5,11 @@
 > [SCOPE.md](SCOPE.md) before use. Use at your own risk; **AS IS**, no warranty.
 # WEB1 — SQL Injection Automation Tool
 
-Automated SQL injection detection and exploitation framework.
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
+
+Automated SQL injection detection and exploitation framework for authorized
+web application security testing and SQL injection labs.
 
 ## Overview
 
@@ -203,4 +207,15 @@ a deliberately misconfigured app on 127.0.0.1 or 192.0.2.x RFC-5737 space):
 
 ## License
 
-MIT
+MIT — see [LICENSE](LICENSE). Educational and authorized testing use only.
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) and [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
+Report security issues via [SECURITY.md](SECURITY.md).
+
+## Documentation
+
+- [ETHICS.md](ETHICS.md) — usage policy
+- [SCOPE.md](SCOPE.md) — authorized testing scope
+- [SECURITY.md](SECURITY.md) — vulnerability reporting
